@@ -1,0 +1,77 @@
+<form [formGroup]="registerForm" (ngSubmit)="register()" class="mt-4 mb-3" role="form">
+  <legend>Create an user</legend>
+
+  <div class="mb-3">
+    <label for="username">Username:</label>
+    <input
+      type="text"
+      class="form-control"
+      id="username"
+      placeholder="Username"
+      formControlName="username"
+      [ngClass]="{
+        'is-valid': username.touched && username.valid && username.value,
+        'is-invalid': username.touched && !username.valid
+      }"
+    />
+    @if(username.errors?.["required"]) {
+    <div class="invalid-feedback">Username is required</div>
+    }
+  </div>
+  <div class="mb-3" formGroupName="emailGroup">
+    <label for="email">Email:</label>
+    <input
+      type="email"
+      class="form-control"
+      id="email"
+      placeholder="Email"
+      formControlName="email"
+      [ngClass]="{
+        'is-valid': email.touched && email.valid && email.value,
+      'is-invalid': email.touched && !email.valid
+    }"
+    />
+    @if(email.errors?.["required"]) {
+        <div class="invalid-feedback">Email is required</div>
+    }
+    @if(email.errors?.["email"]) {
+        <div class="invalid-feedback">Email must have a valid email format</div>
+    }
+    <label for="email">Email confirm:</label>
+    <input
+      type="email"
+      class="form-control"
+      id="emailConfirm"
+      placeholder="Email Confirm"
+      formControlName="emailConfirm"
+      [ngClass]="{
+        'is-valid': emailConfirm.touched && emailConfirm.valid && emailConfirm.value && emailGroup.valid,
+      'is-invalid': (emailConfirm.touched && !emailConfirm.valid) || (emailGroup.invalid && emailConfirm.touched)
+    }"
+    />
+    <div>{{ "El grupo email es valido: " + emailGroup.valid }}</div>
+    @if(emailConfirm.errors?.["required"]) {
+        <div class="invalid-feedback">Email is required</div>
+    }
+    @if(emailConfirm.errors?.["email"]) {
+        <div class="invalid-feedback">Email must have a valid email format</div>
+    }
+    @if(emailGroup.errors?.["match"]) {
+        <div class="invalid-feedback">Email must match</div>
+    }
+  </div>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="registerForm.invalid"
+  >
+    Create user
+  </button>
+</form>
+
+<div>
+    <h2>Objeto mandado</h2>
+    <div>
+        {{ user | json }}
+    </div>
+</div>
